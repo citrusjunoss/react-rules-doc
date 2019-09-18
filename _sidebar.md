@@ -1,5 +1,5 @@
 - [约定]
-  - [项目约定] (zh-cn/guide)
+  - [项目约定](zh-cn/guide)
   - [Eslint 规则](zh-cn/eslint.md)
   - [vs code 插件](zh-cn/vscodePlugin.md)
 - 公共组件
