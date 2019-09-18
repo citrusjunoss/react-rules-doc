@@ -1,90 +1,116 @@
-**工作文档**
+## 包管理工具
 
----
-> Erp项目
+> 首选使用 yarn，请先搭建 yarn :https://yarnpkg.com/zh-Hans/
 
-该约定提供了一定的参考，可以帮助你规避错误，改善代码的可读性和开发体验。
+已经装了 node 下，可以直接执行以下命令安装 yarn ：
 
-# 组件化
-> 实现页面某一部分功能的结构、样式和逻辑封装成为一个整体，使其高内聚，低耦合，达到分治与复用的目的。
+```
+ npm i yarn -g
+```
 
-- 组件之间不会相互影响，能有效减少出现问题时定位和解决问题的时间
-- 组件化程度高的页面，具有清晰的页面组织和高可读性的HTML结构代码，组件之间的关系一目了然
-- 组件化会强迫开发人员划清各个组件的功能边界，使得开发出的功能更加健壮
-- 结构和功能的复用，减少项目代码耦合
+## 首次启动前准备
 
-# 组件类划分
-> vue中将组件划分为UI组件、应用组件、业务组件三种，但是并不能满足实际开发，我们划分为公共基础组件、公共组件、应用组件、业务组件。
+```
+yarn
+```
 
-- 公共基础组件： 无关业务的UI或功能组件， 粒度很小，具备通用性。
-- 公共组件： 低耦合业务，UI和功能完全，它基于公共基础组件进行的封装和组合， 粒度适中，具备通用性。
-- 应用组件： 根据业务功能和UI设计，它基于公共组件进行的封装和组合， 粒度很粗，具备局部通用性。
-- 业务组件： 完成某个业务模块具体业务的组件，不需要具备通用性。
+## 启动
 
-# 公共组件开发
+```
+yarn start
+```
 
-> 公共组件包括公共基础组件和公共组件两部分。它提供项目所有开发者使用。
+## 打包构建
 
-## 开发前须知
+```
+yarn build
+```
 
-为了Javascript更简洁、容易阅读请尽量使用ES6语法，部分参考如下：
+## 文档生成 (后续集成到webpack, 目前库有bug)
 
-- 正确使用const、let替代var
-- 字符串拼接使用字符串模板`${this.data}`
-- 工具函数等依赖单独分离，使用时使用improt引入
-- 解构赋值、箭头函数、对象字面量缩写
+```
+yarn docs
+```
 
-.....
+## 项目目录
 
-## 组件目录
-- 公共组件应该放在components／目录下，基础组件放在componets／Base目录下，应用组件和业务组件在各路由目录中
-- 目录命名：除脚手架已生成目录外，其余涉及到组件的目录都使用大驼峰命名，比如CamelCase。（注意windows系统对目录大小写不敏感）
+```json
+- .vscode              —— vsCode 设置
+- app
+  - components         —— 组件目录(子目录大驼峰命名)
+    - Base                —— 基础组件(UI组件, 组件示例,其他组件参考此处)
+      -BaseCompName          —— xx组件目录
+        - less                —— xx组件样式目录
+          + baseCompName.less    —— xx 组件样式名称(小驼峰组件名命名)
+        - images              —— xx组件静态图片
+        - data                —— 其他静态数据(不常用)
+        + index.js            —— xx组件导出文件
+        + BaseCompName.js     —— xx组件代码
+    - Commom              —— 通用组件(轻逻辑, 低耦合组件， Q为前缀)
+    - HOC                 —— 高阶组件
+    - CompontsName        —— 业务组件(不可复用, 高耦合)
+  + config           —— 本地服务配置目录
+    + api.js             —— 接口地址配置
+    + index.js           —— 接口域名配置
+  + static           —— 静态资源目录
+  + test             —— 单元测试目录
+  + redux            —— redux
+    - reducers.js        —— 组合模块化reducer
+    - sagas.js           —— saga 运行参数
+  + store            —— redux store
+    - configureStore.dev.js   —— stroe 开发配置
+    - configureStore.js        —— stroe 开发配置
+    - configureStore.prod.js    —— stroe 开发配置
+  - utils            —— 公用工具类
+    +ReduxReqs.js    —— 异步请求封装(reducer, saga, action 等)
++ configs         —— webpack 配置
++ .editorconfig   ——  部分格式化规则
+- test            ——  测试目录
+- package.json    ——  项目配置(热启动, 打包等)
+- yarn.lock       ——  依赖版本控制
+- CHANGELOG.md    ——  更新日志
+```
 
-## 组件命名
-- 尽量简单、表意
-- 大驼峰命名法，比如 ButtonItem
-- 基础组件以Base为命名空间，公共组件以Ips为命名空间
-- 如组件需要嵌套使用，子组件命名在父组件后加item，比如TimeLine及TimeLineItem
+## 项目规范
 
-## 组件结构
+### 目录规范
 
-vue方法放置顺序：
+> 请参考项目目录
 
-components 、props 、data 、created 、mounted 、activited 、update 、beforRouteUpdate 、methods 、filter 、computed 、watch
+### 组件规范
 
-## 属性props
-- 必须对传入数据的类型进行验证，并且设置默认值
-- 对于有尺寸的size，请参照elementUI使用small、mini、large，默认适中。
-- 对于传入参数为Boolen类型的， 统一设置默认为false
+#### 组件目录
 
+- Base 放置基础组件, 特点是 UI 为主, 无业务逻辑(Base前缀); Common 通用组件, 轻业务逻辑,低耦合, 可以复用（Q前缀）;HOC 高阶组件; ComponentName 业务组件, 不可复用
+- 组件目录下需要写`index.js`导出该组件, `组件名.js`写组件业务逻辑, less 作为样式目录,less 下文件用小驼峰`组件名.less`文件, images 放置图片等静态文件, 如果需要子组件,则直接在该目录下写子`组件名.tsx`
 
-## 事件
+#### 命名规范
 
-- 以小驼峰命名法且on开头的动宾短语，比如 onChange
-- 使用 `$emit`对父级组件触发事件
-- 保持组件独立，尽量不依赖其他组件操作（ref调用属性或功能，this.$parent等）
+- 采用 Pascal(大驼峰)命名组件, 例如`ComponentName`, 除组件名之外其他均采用小驼峰命名
+- 组件内 事件方法使`hanleXxxx`, 组件属性方法使用 onXxxxxx
+- 有意义的名词、简短、具有可读性
 
-## 样式表
-- 样式表行内必须添加 `scoped` 属性
-- 以组件名为命名空间，方便css调试且避免全局污染，推荐 `.IpsUpload__content { }`
-- 尽量使用flex布局
+#### 组件顺序
 
+1.  静态方法 和 属性
+2.  生命周期方法顺序: `displayName`, `propTypes`, `contextTypes`, `childContextTypes`, `mixins`, `statics`, `defaultProps`, `constructor`, `getDefaultProps`, `state`, `getInitialState`, `getChildContext`, `getDerivedStateFromProps`, `componentWillMount`, `UNSAFE_componentWillMount`, `componentDidMount`, `componentWillReceiveProps`, `UNSAFE_componentWillReceiveProps`, `shouldComponentUpdate`, `componentWillUpdate`, `UNSAFE_componentWillUpdate`, `getSnapshotBeforeUpdate`, `componentDidUpdate`, `componentDidCatch`, `componentWillUnmount` (按照此顺序).
+3.  自定义方法
+4.  `render` 方法
 
-## 撰写组件文档
+> 组件属性需要提前声明(命名,类型), 并设置默认值.
 
-组件开发完成后请注释署名。然后前往项目组件文档进行撰写工作。
+#### 其它
 
-文档最少包括一下几项：组件感慨说明及文件位置、基础用法、属性参数解释说明、事件参数介绍说明。（请参照已有组件例子）
+- 组件通过数组遍历 dom 时,需要添加 key 属性作为唯一标识,优化性能.
+- 代码格式相关(缩进, 换行, 对齐等),参考 ESLint 规范.
 
-检查组件是否良好：
+#### 组件样式
 
-- 简洁易用的属性API（props为通用类型String、Boolen、Number）
-- 通用性、可拓展性
-- 独立可用、单一职责
+- 使用 less 书写组件样式
+- 使用命名空间,避免全局变量污染
 
-# 公共组件的维护和修改
+## 相关文档
 
-- 不是自己开发的组件时，联系开发人员进行修改。
-- 自己开发的组件修改接口后必须兼容老接口（除非你能确定没有其他同事使用你的组件）。
+> [ESLint 规则文档](./eslint.md)
 
-画重点： 不要随便去修改别人的组件代码，后果很严重...
+> [VsCode 插件目录](./vscodePlugin.md)
