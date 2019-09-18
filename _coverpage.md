@@ -1,7 +1,5 @@
 ![logo](zh-cn/images/assets/logo.png)
 
-# QZD DOC
-
 > 前端规范文档 - React
 
 * 确保一致性，培养良好的编码习惯
